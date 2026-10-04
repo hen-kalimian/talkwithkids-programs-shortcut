@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>התוכניות שלי - לדבר עם ילדים</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#386380">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="התוכניות שלי">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fbfcfc;
+    --panel:#ffffff;
+    --text:#1e2a31;
+    --muted:#6c808c;
+    --border:#d6e6ee;
+    --blue:#467c9c; --blue-dark:#386380; --blue-tint:#f0f7fb;
+    --mint:#3a8e69; --mint-dark:#317255; --mint-tint:#f0faf5;
+    --gold:#a67a24; --gold-dark:#85601f; --gold-tint:#fbf6e8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:linear-gradient(135deg,#fbfcfc 0%,#f0f7fb 100%);
+    font-family:'Open Sans','Rubik',sans-serif;
+    color:var(--text);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:28px 16px;
+  }
+  h1,h2{font-family:'Rubik',sans-serif;letter-spacing:-0.01em;}
+
+  .card{
+    width:100%;
+    max-width:440px;
+    background:var(--panel);
+    border-radius:22px;
+    padding:34px 28px;
+    box-shadow:0 8px 30px rgba(30,42,49,0.08);
+    border:1px solid var(--border);
+    text-align:center;
+  }
+  .logo-dot{
+    width:56px;height:56px;
+    border-radius:16px;
+    background:var(--blue-tint);
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 16px;
+  }
+  .logo-dot svg{width:30px;height:30px;fill:none;stroke:var(--blue-dark);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+  h1{font-size:19px;margin:0 0 8px;color:var(--blue-dark);}
+  .sub{color:var(--muted);font-size:13.5px;line-height:1.6;margin-bottom:24px;}
+
+  #loading{color:var(--muted);font-size:13px;}
+
+  .install-btn{
+    display:block;
+    width:100%;
+    padding:16px;
+    border:none;
+    border-radius:14px;
+    background:var(--blue-dark);
+    color:#fff;
+    font-size:16px;
+    font-weight:700;
+    font-family:'Rubik',sans-serif;
+    cursor:pointer;
+    margin-bottom:12px;
+  }
+  .install-btn:hover{background:#2d4f66;}
+
+  .fallback-link{
+    display:block;
+    padding:14px;
+    border-radius:14px;
+    background:var(--blue-tint);
+    color:var(--blue-dark);
+    text-decoration:none;
+    font-weight:600;
+    font-size:14px;
+    border:1px solid var(--border);
+  }
+
+  .steps{text-align:right;margin:0 0 20px;padding:0;list-style:none;}
+  .step{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    background:var(--mint-tint);
+    border:1px solid #dcf0e6;
+    border-radius:14px;
+    padding:14px 16px;
+    margin-bottom:10px;
+  }
+  .step .num{
+    flex-shrink:0;
+    width:26px;height:26px;
+    border-radius:50%;
+    background:var(--mint-dark);
+    color:#fff;
+    font-weight:700;
+    font-size:13px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .step .txt{font-size:13.5px;line-height:1.55;padding-top:2px;}
+  .step .icon-inline{display:inline-flex;vertical-align:middle;margin:0 3px;}
+  .step .icon-inline svg{width:16px;height:16px;fill:none;stroke:var(--mint-dark);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+
+  .success{display:none;color:var(--mint-dark);font-weight:700;font-size:14px;margin-top:10px;}
+  .success.show{display:block;}
+
+  .footer-note{margin-top:22px;font-size:11.5px;color:var(--muted);}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo-dot">
+      <svg viewBox="0 0 24 24"><path d="M12 3 2 8l10 5 10-5-10-5Z"/><path d="M6 10.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-5.5"/></svg>
+    </div>
+    <h1>התוכניות שלי</h1>
+    <div class="sub">הוסיפי קיצור דרך למסך הבית, ומעכשיו הכניסה לתוכניות שלך לחיצה אחת</div>
+
+    <div id="loading">בודקת את המכשיר שלך...</div>
+
+    <button id="installBtn" class="install-btn" style="display:none">להוספת קיצור הדרך עכשיו</button>
+
+    <ol id="iosSteps" class="steps" style="display:none">
+      <li class="step"><span class="num">1</span><span class="txt">לחצי על כפתור השיתוף <span class="icon-inline"><svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><rect x="5" y="12" width="14" height="8" rx="2"/></svg></span> בתחתית מסך ספארי</span></li>
+      <li class="step"><span class="num">2</span><span class="txt">גללי מטה ובחרי ב"הוסף למסך הבית"</span></li>
+      <li class="step"><span class="num">3</span><span class="txt">לחצי על "הוסף" למעלה מימין</span></li>
+    </ol>
+
+    <ol id="genericSteps" class="steps" style="display:none">
+      <li class="step"><span class="num">1</span><span class="txt">פתחי את תפריט הדפדפן (שלוש נקודות למעלה)</span></li>
+      <li class="step"><span class="num">2</span><span class="txt">בחרי "התקן אפליקציה" או "הוסף למסך הבית"</span></li>
+    </ol>
+
+    <a id="fallbackLink" class="fallback-link" href="http://talkwithkids.co.il/account/programs" target="_blank" rel="noopener">או לחצי כאן להיכנס לתוכניות עכשיו</a>
+
+    <div id="success" class="success">✓ מעולה, קיצור הדרך נוסף למסך הבית</div>
+
+    <div class="footer-note">talkwithkids.co.il</div>
+  </div>
+
+<script>
+  const TARGET = 'http://talkwithkids.co.il/account/programs';
+
+  // אם זה כבר מותקן ונפתח כאפליקציה עצמאית - קופצים ישר לעמוד התוכניות
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  if (isStandalone) {
+    location.replace(TARGET);
+  }
+
+  const ua = navigator.userAgent;
+  const isIOS = /iPad|iPhone|iPod/.test(ua) || (ua.includes('Macintosh') && navigator.maxTouchPoints > 1);
+
+  const loading = document.getElementById('loading');
+  const installBtn = document.getElementById('installBtn');
+  const iosSteps = document.getElementById('iosSteps');
+  const genericSteps = document.getElementById('genericSteps');
+  const successMsg = document.getElementById('success');
+
+  let deferredPrompt = null;
+  let decided = false;
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    decide();
+  });
+
+  function decide() {
+    if (decided) return;
+    decided = true;
+    loading.style.display = 'none';
+    if (deferredPrompt) {
+      installBtn.style.display = 'block';
+    } else if (isIOS) {
+      iosSteps.style.display = 'block';
+    } else {
+      genericSteps.style.display = 'block';
+    }
+  }
+
+  installBtn.addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const choice = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    if (choice.outcome === 'accepted') {
+      installBtn.style.display = 'none';
+      successMsg.classList.add('show');
+    }
+  });
+
+  window.addEventListener('appinstalled', () => {
+    installBtn.style.display = 'none';
+    successMsg.classList.add('show');
+  });
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+
+  // אם אחרי שנייה וחצי beforeinstallprompt לא נורה - זה לא נתמך בדפדפן הזה, מציגים הדרכה
+  setTimeout(decide, 1500);
+</script>
+</body>
+</html>
