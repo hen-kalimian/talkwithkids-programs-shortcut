@@ -181,8 +181,8 @@
     <!-- מחשב בלי כפתור התקנה -->
     <div id="v-desktop" class="view">
       <ol class="steps">
-        <li class="step"><span class="num">1</span><span class="txt" id="deskMenu">פתחי את תפריט הדפדפן (שלוש הנקודות למעלה)</span></li>
-        <li class="step"><span class="num">2</span><span class="txt" id="deskPick">בחרי "שמירה ושיתוף" ואז "התקנת עמוד כאפליקציה"</span></li>
+        <li class="step"><span class="num">1</span><span class="txt" id="deskMenu">חפשי בשורת הכתובת למעלה סמל התקנה (מסך קטן עם חץ למטה) ולחצי עליו</span></li>
+        <li class="step"><span class="num">2</span><span class="txt" id="deskPick">אין סמל כזה? כנראה שהקיצור כבר מותקן במחשב הזה. חפשי "התוכניות שלי" בתפריט התחל או בשולחן העבודה</span></li>
       </ol>
     </div>
 
@@ -257,7 +257,7 @@
     // מחשב
     if (isSafariDesktop) { $('deskMenu').textContent = 'בשורת התפריטים העליונה של ספארי לחצי על "קובץ"'; $('deskPick').textContent = 'בחרי "הוספה ל-Dock"'; }
     else if (isFirefox) { $('deskMenu').textContent = 'ב-Firefox אין התקנה של קיצור כמו באפליקציה, אבל אפשר לשמור את הדף לסימניות'; $('deskPick').textContent = 'לחצי Ctrl ו-D יחד ואשרי'; }
-    else if (isEdge) { $('deskPick').textContent = 'בחרי "אפליקציות" ואז "התקנת אתר זה כאפליקציה"'; }
+    else if (isEdge) { $('deskPick').textContent = 'אין סמל כזה? בתפריט הדפדפן בחרי "אפליקציות" ואז "התקנת אתר זה כאפליקציה". אם אין, כנראה שהקיצור כבר מותקן, חפשי "התוכניות שלי" בתפריט התחל'; }
     return show('v-desktop');
   }
 
@@ -317,7 +317,10 @@
   // כרום ואדג' יודעים לדווח שהאפליקציה כבר מותקנת
   if (navigator.getInstalledRelatedApps) {
     navigator.getInstalledRelatedApps().then(function (apps) {
-      if (apps && apps.length && !forceAdd) { setFlag(true); location.reload(); }
+      if (apps && apps.length) {
+        if (!forceAdd) { setFlag(true); location.reload(); return; }
+        if (isDesktop) { $('deskMenu').textContent = 'הקיצור כבר מותקן במחשב הזה'; $('deskPick').textContent = 'חפשי "התוכניות שלי" בתפריט התחל או בשולחן העבודה, ופתחי אותו משם'; }
+      }
     }).catch(function () {});
   }
 
