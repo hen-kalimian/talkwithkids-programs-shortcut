@@ -2,216 +2,239 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>התוכניות שלי - לדבר עם ילדים</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#386380">
-<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#f23e6d">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="התוכניות שלי">
+<script>
+  // כשהדף נפתח מהאייקון שבמסך הבית (אפליקציה עצמאית) קופצים מיד לעמוד התוכניות, בלי להציג כלום.
+  var TARGET = 'https://www.talkwithkids.co.il/account/programs';
+  var KEY = 'twk-shortcut-installed';
+  var isStandalone = false;
+  try {
+    isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches ||
+      window.matchMedia('(display-mode: minimal-ui)').matches || window.navigator.standalone === true || /[?&]source=pwa\b/.test(location.search);
+  } catch (e) {}
+  if (isStandalone) {
+    try { localStorage.setItem(KEY, '1'); } catch (e) {}
+    document.documentElement.className = 'go';
+    location.replace(TARGET);
+  }
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#fbfcfc;
-    --panel:#ffffff;
-    --text:#1e2a31;
-    --muted:#6c808c;
-    --border:#d6e6ee;
-    --blue:#467c9c; --blue-dark:#386380; --blue-tint:#f0f7fb;
-    --mint:#3a8e69; --mint-dark:#317255; --mint-tint:#f0faf5;
-    --gold:#a67a24; --gold-dark:#85601f; --gold-tint:#fbf6e8;
+    --bg:#ffffff; --panel:#ffffff; --text:#1e2a31; --muted:#6c808c; --border:#e7e1e5;
+    --pink:#f23e6d; --pink-dark:#d62d5b; --pink-tint:#fff0f4; --pink-soft:#fbd3de;
+    --mint:#3a8e69; --mint-dark:#317255; --mint-tint:#f0faf5; --mint-border:#dcf0e6;
+    --blue-dark:#386380; --blue-tint:#f0f7fb; --blue-border:#d6e6ee;
   }
   *{box-sizing:border-box;}
+  html.go body{visibility:hidden;}
   body{
-    margin:0;
-    min-height:100vh;
-    background:linear-gradient(135deg,#fbfcfc 0%,#f0f7fb 100%);
-    font-family:'Open Sans','Rubik',sans-serif;
-    color:var(--text);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:28px 16px;
+    margin:0; min-height:100vh;
+    background:linear-gradient(160deg,#fff0f4 0%,#ffffff 45%,#eef9f4 100%);
+    font-family:'Open Sans','Rubik',sans-serif; color:var(--text);
+    display:flex; align-items:center; justify-content:center; padding:24px 16px;
   }
-  h1,h2{font-family:'Rubik',sans-serif;letter-spacing:-0.01em;}
-
+  h1{font-family:'Rubik',sans-serif;letter-spacing:-0.01em;}
   .card{
-    width:100%;
-    max-width:440px;
-    background:var(--panel);
-    border-radius:22px;
-    padding:34px 28px;
-    box-shadow:0 8px 30px rgba(30,42,49,0.08);
-    border:1px solid var(--border);
-    text-align:center;
+    width:100%; max-width:440px; background:var(--panel); border-radius:24px; padding:28px 24px 24px;
+    box-shadow:0 10px 34px rgba(242,62,109,0.10); border:1px solid var(--border); text-align:center;
   }
-  .logo-dot{
-    width:56px;height:56px;
-    border-radius:16px;
-    background:var(--blue-tint);
-    display:flex;align-items:center;justify-content:center;
-    margin:0 auto 16px;
-  }
-  .logo-dot svg{width:30px;height:30px;fill:none;stroke:var(--blue-dark);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
-  h1{font-size:19px;margin:0 0 8px;color:var(--blue-dark);}
-  .sub{color:var(--muted);font-size:13.5px;line-height:1.6;margin-bottom:24px;}
+  .logo{width:168px;max-width:60%;height:auto;display:block;margin:0 auto 10px;}
+  h1{font-size:21px;margin:0 0 8px;color:var(--pink);}
+  .sub{color:var(--muted);font-size:14px;line-height:1.6;margin-bottom:20px;}
+  #loading{color:var(--muted);font-size:13px;margin-bottom:14px;}
+  .view{display:none;}
+  .view.show{display:block;}
 
-  #loading{color:var(--muted);font-size:13px;}
-
-  .install-btn{
-    display:block;
-    width:100%;
-    padding:16px;
-    border:none;
-    border-radius:14px;
-    background:var(--blue-dark);
-    color:#fff;
-    font-size:16px;
-    font-weight:700;
-    font-family:'Rubik',sans-serif;
-    cursor:pointer;
-    margin-bottom:12px;
+  .btn{
+    display:block; width:100%; padding:16px; border:none; border-radius:14px; background:var(--pink); color:#fff;
+    font-size:17px; font-weight:700; font-family:'Rubik',sans-serif; cursor:pointer; margin:0 auto 12px; text-align:center; text-decoration:none;
   }
-  .install-btn:hover{background:#2d4f66;}
+  .btn:hover{background:var(--pink-dark);}
+  .btn.soft{background:var(--blue-tint);color:var(--blue-dark);border:1px solid var(--blue-border);font-size:15px;font-weight:600;padding:14px;}
+  .btn.soft:hover{background:#e3f0f7;}
 
-  .fallback-link{
-    display:block;
-    padding:14px;
-    border-radius:14px;
-    background:var(--blue-tint);
-    color:var(--blue-dark);
-    text-decoration:none;
-    font-weight:600;
-    font-size:14px;
-    border:1px solid var(--border);
-  }
-
-  .steps{text-align:right;margin:0 0 20px;padding:0;list-style:none;}
-  .step{
-    display:flex;
-    gap:12px;
-    align-items:flex-start;
-    background:var(--mint-tint);
-    border:1px solid #dcf0e6;
-    border-radius:14px;
-    padding:14px 16px;
-    margin-bottom:10px;
-  }
-  .step .num{
-    flex-shrink:0;
-    width:26px;height:26px;
-    border-radius:50%;
-    background:var(--mint-dark);
-    color:#fff;
-    font-weight:700;
-    font-size:13px;
-    display:flex;align-items:center;justify-content:center;
-  }
-  .step .txt{font-size:13.5px;line-height:1.55;padding-top:2px;}
-  .step .icon-inline{display:inline-flex;vertical-align:middle;margin:0 3px;}
-  .step .icon-inline svg{width:16px;height:16px;fill:none;stroke:var(--mint-dark);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
-
-  .success{display:none;color:var(--mint-dark);font-weight:700;font-size:14px;margin-top:10px;}
+  .steps{text-align:right;margin:0 0 16px;padding:0;list-style:none;}
+  .step{display:flex;gap:12px;align-items:flex-start;background:var(--mint-tint);border:1px solid var(--mint-border);border-radius:14px;padding:13px 15px;margin-bottom:9px;}
+  .step .num{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--mint-dark);color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;}
+  .step .txt{font-size:14px;line-height:1.55;padding-top:2px;}
+  .step .ico{display:inline-flex;vertical-align:middle;margin:0 3px;}
+  .step .ico svg{width:17px;height:17px;fill:none;stroke:var(--mint-dark);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .note{background:var(--pink-tint);border:1px solid var(--pink-soft);border-radius:14px;padding:12px 14px;font-size:13.5px;line-height:1.6;margin-bottom:14px;text-align:right;}
+  .ok{color:var(--mint-dark);font-weight:700;font-size:15px;margin:0 0 14px;}
+  .success{display:none;color:var(--mint-dark);font-weight:700;font-size:15px;margin:6px 0 12px;}
   .success.show{display:block;}
-
-  .footer-note{margin-top:22px;font-size:11.5px;color:var(--muted);}
+  .tiny{display:inline-block;margin-top:8px;background:none;border:none;color:var(--muted);font-size:12.5px;text-decoration:underline;cursor:pointer;font-family:inherit;padding:4px;}
+  .footer-note{margin-top:16px;font-size:11.5px;color:var(--muted);}
 </style>
 </head>
 <body>
   <div class="card">
-    <div class="logo-dot">
-      <svg viewBox="0 0 24 24"><path d="M12 3 2 8l10 5 10-5-10-5Z"/><path d="M6 10.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-5.5"/></svg>
-    </div>
+    <img class="logo" src="logo.png" alt="לדבר עם ילדים - חן קלימיאן, קלינאית תקשורת">
     <h1>התוכניות שלי</h1>
-    <div class="sub">הוסיפי קיצור דרך למסך הבית, ומעכשיו הכניסה לתוכניות שלך לחיצה אחת</div>
+    <div class="sub" id="sub">הוסיפי קיצור דרך למסך הבית, ומעכשיו הכניסה לתוכניות שלך לחיצה אחת</div>
 
     <div id="loading">בודקת את המכשיר שלך...</div>
 
-    <button id="installBtn" class="install-btn" style="display:none">להוספת קיצור הדרך עכשיו</button>
+    <!-- כפתור התקנה אוטומטי (אנדרואיד, מחשב עם כרום או אדג') -->
+    <div id="v-install" class="view">
+      <button id="installBtn" class="btn" type="button">להוספת קיצור הדרך עכשיו</button>
+    </div>
 
-    <ol id="iosSteps" class="steps" style="display:none">
-      <li class="step"><span class="num">1</span><span class="txt">לחצי על כפתור השיתוף <span class="icon-inline"><svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><rect x="5" y="12" width="14" height="8" rx="2"/></svg></span> בתחתית מסך ספארי</span></li>
-      <li class="step"><span class="num">2</span><span class="txt">גללי מטה ובחרי ב"הוסף למסך הבית"</span></li>
-      <li class="step"><span class="num">3</span><span class="txt">לחצי על "הוסף" למעלה מימין</span></li>
-    </ol>
+    <!-- אייפון / אייפד -->
+    <div id="v-ios" class="view">
+      <ol class="steps">
+        <li class="step"><span class="num">1</span><span class="txt" id="iosShare">לחצי על כפתור השיתוף <span class="ico"><svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><rect x="5" y="12" width="14" height="8" rx="2"/></svg></span> בתחתית המסך</span></li>
+        <li class="step"><span class="num">2</span><span class="txt">גללי מטה ובחרי "הוסף למסך הבית"</span></li>
+        <li class="step"><span class="num">3</span><span class="txt">לחצי "הוסף" למעלה</span></li>
+        <li class="step"><span class="num">4</span><span class="txt">מעכשיו נכנסים לתוכניות מהאייקון שנוסף במסך הבית</span></li>
+      </ol>
+    </div>
 
-    <ol id="genericSteps" class="steps" style="display:none">
-      <li class="step"><span class="num">1</span><span class="txt">פתחי את תפריט הדפדפן (שלוש נקודות למעלה)</span></li>
-      <li class="step"><span class="num">2</span><span class="txt">בחרי "התקן אפליקציה" או "הוסף למסך הבית"</span></li>
-    </ol>
+    <!-- אנדרואיד בלי כפתור התקנה, או דפדפן אחר -->
+    <div id="v-android" class="view">
+      <ol class="steps">
+        <li class="step"><span class="num">1</span><span class="txt" id="andMenu">פתחי את תפריט הדפדפן (שלוש הנקודות למעלה)</span></li>
+        <li class="step"><span class="num">2</span><span class="txt" id="andPick">בחרי "הוספה למסך הבית" או "התקנת אפליקציה"</span></li>
+        <li class="step"><span class="num">3</span><span class="txt">אשרי, והאייקון יופיע במסך הבית</span></li>
+      </ol>
+    </div>
 
-    <a id="fallbackLink" class="fallback-link" href="http://talkwithkids.co.il/account/programs" target="_blank" rel="noopener">או לחצי כאן להיכנס לתוכניות עכשיו</a>
+    <!-- מחשב בלי כפתור התקנה -->
+    <div id="v-desktop" class="view">
+      <ol class="steps">
+        <li class="step"><span class="num">1</span><span class="txt" id="deskMenu">פתחי את תפריט הדפדפן (שלוש הנקודות למעלה)</span></li>
+        <li class="step"><span class="num">2</span><span class="txt" id="deskPick">בחרי "שמירה ושיתוף" ואז "התקנת עמוד כאפליקציה"</span></li>
+      </ol>
+    </div>
 
-    <div id="success" class="success">✓ מעולה, קיצור הדרך נוסף למסך הבית</div>
+    <!-- דפדפן שבתוך אפליקציה (פייסבוק, אינסטגרם, וואטסאפ) -->
+    <div id="v-inapp" class="view">
+      <div class="note" id="inappNote">הדף נפתח בתוך אפליקציה, ושם אי אפשר להוסיף קיצור דרך. פתחי אותו בדפדפן של המכשיר: לחצי על שלוש הנקודות בפינה ובחרי "פתיחה בדפדפן".</div>
+      <button id="copyBtn" class="btn soft" type="button">להעתקת הקישור</button>
+    </div>
+
+    <!-- כבר הותקן -->
+    <div id="v-installed" class="view">
+      <p class="ok">✓ הקיצור כבר נוסף, מעבירה אותך לתוכניות...</p>
+    </div>
+
+    <div id="success" class="success">✓ מעולה, קיצור הדרך נוסף. מעכשיו פותחים את התוכניות מהאייקון</div>
+
+    <a id="goLink" class="btn soft" href="https://www.talkwithkids.co.il/account/programs">כניסה לתוכניות שלי עכשיו</a>
+    <button id="alreadyBtn" class="tiny" type="button">כבר הוספתי קיצור, אל תציגי לי את זה שוב</button>
+    <button id="resetBtn" class="tiny" type="button" style="display:none">הוספה מחדש של הקיצור</button>
 
     <div class="footer-note">talkwithkids.co.il</div>
   </div>
 
 <script>
-  const TARGET = 'http://talkwithkids.co.il/account/programs';
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var ua = navigator.userAgent || '';
+  var isIOS = /iPad|iPhone|iPod/.test(ua) || (ua.indexOf('Macintosh') > -1 && navigator.maxTouchPoints > 1);
+  var isAndroid = /Android/i.test(ua);
+  var isInApp = /FBAN|FBAV|FB_IAB|Instagram|WhatsApp|Line\/|Snapchat|TikTok|Messenger|MicroMessenger/i.test(ua) || (isAndroid && /; wv\)/.test(ua));
+  var isIOSChrome = /CriOS/.test(ua), isIOSOther = /FxiOS|EdgiOS|OPiOS/.test(ua);
+  var isSamsung = /SamsungBrowser/i.test(ua);
+  var isFirefox = /Firefox|FxiOS/.test(ua);
+  var isEdge = /Edg\//.test(ua);
+  var isChromium = /Chrome\//.test(ua) && !/OPR\//.test(ua) && !isIOS;
+  var isSafariDesktop = !isIOS && !isAndroid && /Safari\//.test(ua) && !/Chrome\/|Chromium\//.test(ua);
+  var isDesktop = !isIOS && !isAndroid;
 
-  // אם זה כבר מותקן ונפתח כאפליקציה עצמאית - קופצים ישר לעמוד התוכניות
-  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-  if (isStandalone) {
-    location.replace(TARGET);
+  function flagged() { try { return localStorage.getItem(KEY) === '1'; } catch (e) { return false; } }
+  function setFlag(v) { try { if (v) localStorage.setItem(KEY, '1'); else localStorage.removeItem(KEY); } catch (e) {} }
+  var forceAdd = /[?&]add=1\b/.test(location.search);
+
+  var deferred = null, decided = false, current = null;
+  var views = ['v-install', 'v-ios', 'v-android', 'v-desktop', 'v-inapp', 'v-installed'];
+  function show(id) {
+    current = id;
+    $('loading').style.display = 'none';
+    views.forEach(function (v) { $(v).className = 'view' + (v === id ? ' show' : ''); });
   }
-
-  const ua = navigator.userAgent;
-  const isIOS = /iPad|iPhone|iPod/.test(ua) || (ua.includes('Macintosh') && navigator.maxTouchPoints > 1);
-
-  const loading = document.getElementById('loading');
-  const installBtn = document.getElementById('installBtn');
-  const iosSteps = document.getElementById('iosSteps');
-  const genericSteps = document.getElementById('genericSteps');
-  const successMsg = document.getElementById('success');
-
-  let deferredPrompt = null;
-  let decided = false;
-
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    decide();
-  });
 
   function decide() {
-    if (decided) return;
+    if (decided && current === 'v-install') return;
+    if (deferred) { decided = true; return show('v-install'); }
     decided = true;
-    loading.style.display = 'none';
-    if (deferredPrompt) {
-      installBtn.style.display = 'block';
-    } else if (isIOS) {
-      iosSteps.style.display = 'block';
-    } else {
-      genericSteps.style.display = 'block';
+    if (isInApp) {
+      if (isIOS) $('inappNote').textContent = 'הדף נפתח בתוך אפליקציה, ושם אי אפשר להוסיף קיצור דרך. לחצי על שלוש הנקודות (או על סמל המצפן) ובחרי "פתיחה בספארי".';
+      return show('v-inapp');
     }
+    if (isIOS) {
+      if (isIOSChrome || isIOSOther) $('iosShare').innerHTML = 'לחצי על כפתור השיתוף <span class="ico"><svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><rect x="5" y="12" width="14" height="8" rx="2"/></svg></span> בשורת הכתובת למעלה (אם אין, לחצי על שלוש הנקודות ואז על "שיתוף")';
+      return show('v-ios');
+    }
+    if (isAndroid) {
+      if (isSamsung) { $('andMenu').textContent = 'לחצי על סמל התפריט (שלושה פסים) בתחתית המסך'; $('andPick').textContent = 'בחרי "הוספה אל" ואז "מסך הבית"'; }
+      else if (isFirefox) { $('andPick').textContent = 'בחרי "התקנה" או "הוספה למסך הבית"'; }
+      return show('v-android');
+    }
+    // מחשב
+    if (isSafariDesktop) { $('deskMenu').textContent = 'בשורת התפריטים העליונה של ספארי לחצי על "קובץ"'; $('deskPick').textContent = 'בחרי "הוספה ל-Dock"'; }
+    else if (isFirefox) { $('deskMenu').textContent = 'ב-Firefox אין התקנה של קיצור כמו באפליקציה, אבל אפשר לשמור את הדף לסימניות'; $('deskPick').textContent = 'לחצי Ctrl ו-D יחד ואשרי'; }
+    else if (isEdge) { $('deskPick').textContent = 'בחרי "אפליקציות" ואז "התקנת אתר זה כאפליקציה"'; }
+    return show('v-desktop');
   }
 
-  installBtn.addEventListener('click', async () => {
-    if (!deferredPrompt) return;
-    deferredPrompt.prompt();
-    const choice = await deferredPrompt.userChoice;
-    deferredPrompt = null;
-    if (choice.outcome === 'accepted') {
-      installBtn.style.display = 'none';
-      successMsg.classList.add('show');
-    }
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault(); deferred = e;
+    if (!flagged() || forceAdd) { decided = false; decide(); }
   });
 
-  window.addEventListener('appinstalled', () => {
-    installBtn.style.display = 'none';
-    successMsg.classList.add('show');
+  $('installBtn').addEventListener('click', function () {
+    if (!deferred) return;
+    deferred.prompt();
+    deferred.userChoice.then(function (c) {
+      deferred = null;
+      if (c.outcome === 'accepted') { setFlag(true); views.forEach(function (v) { $(v).className = 'view'; }); $('success').className = 'success show'; }
+    });
+  });
+  window.addEventListener('appinstalled', function () {
+    setFlag(true); views.forEach(function (v) { $(v).className = 'view'; }); $('loading').style.display = 'none'; $('success').className = 'success show';
   });
 
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
+  $('alreadyBtn').addEventListener('click', function () { setFlag(true); location.href = TARGET; });
+  $('resetBtn').addEventListener('click', function () { setFlag(false); location.replace(location.pathname + '?add=1'); });
+  $('copyBtn').addEventListener('click', function () {
+    var url = location.origin + location.pathname;
+    var done = function () { $('copyBtn').textContent = 'הקישור הועתק, פתחי את הדפדפן והדביקי'; };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, done); else done();
+  });
+
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
+
+  // כבר הותקן בדפדפן הזה: מעבירים ישר לתוכניות (אלא אם ביקשו להוסיף מחדש)
+  if (flagged() && !forceAdd) {
+    $('sub').style.display = 'none'; $('alreadyBtn').style.display = 'none'; $('resetBtn').style.display = 'inline-block';
+    show('v-installed');
+    setTimeout(function () { if (current === 'v-installed') location.href = TARGET; }, 1400);
+    return;
   }
 
-  // אם אחרי שנייה וחצי beforeinstallprompt לא נורה - זה לא נתמך בדפדפן הזה, מציגים הדרכה
+  // כרום ואדג' יודעים לדווח שהאפליקציה כבר מותקנת
+  if (navigator.getInstalledRelatedApps) {
+    navigator.getInstalledRelatedApps().then(function (apps) {
+      if (apps && apps.length && !forceAdd) { setFlag(true); location.reload(); }
+    }).catch(function () {});
+  }
+
+  // אם אחרי שנייה וחצי לא הגיעה הצעת התקנה, מציגים הדרכה מתאימה למכשיר
   setTimeout(decide, 1500);
+})();
 </script>
 </body>
 </html>

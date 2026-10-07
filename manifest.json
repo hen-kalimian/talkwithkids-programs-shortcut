@@ -1,16 +1,21 @@
 {
+  "id": "/talkwithkids-programs-shortcut/",
   "name": "התוכניות שלי - לדבר עם ילדים",
   "short_name": "התוכניות שלי",
   "description": "קיצור דרך ישיר לעמוד התוכניות שלך",
-  "start_url": "./",
+  "start_url": "./?source=pwa",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#fbfcfc",
-  "theme_color": "#386380",
+  "background_color": "#ffffff",
+  "theme_color": "#f23e6d",
   "dir": "rtl",
   "lang": "he",
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "related_applications": [
+    { "platform": "webapp", "url": "https://hen-kalimian.github.io/talkwithkids-programs-shortcut/manifest.json" }
   ]
 }
