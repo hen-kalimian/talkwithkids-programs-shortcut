@@ -22,10 +22,11 @@
     isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches ||
       window.matchMedia('(display-mode: minimal-ui)').matches || window.navigator.standalone === true || /[?&]source=pwa\b/.test(location.search);
   } catch (e) {}
-  var hasFlag = false, forceAddHead = /[?&](add=1|device=)/.test(location.search);
-  try { hasFlag = localStorage.getItem(KEY) === '1'; } catch (e) {}
-  if (isStandalone || (hasFlag && !forceAddHead)) {
-    if (isStandalone) { try { localStorage.setItem(KEY, '1'); } catch (e) {} }
+  var forceAddHead = /[?&](add=1|device=)/.test(location.search);
+  // אייקון במסך הבית: נפתח בלי דף מפנה (referrer) או עם source=pwa. לחיצה על הלחצן בתוך שיעור מגיעה עם דף מפנה, ואז לא מעבירים לשום מקום.
+  var fromIcon = /[?&]source=pwa(&|$)/.test(location.search) || (isStandalone && !document.referrer);
+  if (fromIcon && !forceAddHead) {
+    try { localStorage.setItem(KEY, '1'); } catch (e) {}
     document.documentElement.className = 'go';
     location.replace(TARGET);
   }
@@ -194,7 +195,8 @@
 
     <!-- כבר הותקן -->
     <div id="v-installed" class="view">
-      <p class="ok">✓ הקיצור כבר נוסף, מעבירה אותך לתוכניות...</p>
+      <p class="ok">✓ הקיצור כבר נוסף במכשיר הזה</p>
+      <a class="tiny" href="?add=1">להוספה מחדש</a>
     </div>
 
     <div id="success" class="success">✓ מעולה, קיצור הדרך נוסף. מעכשיו פותחים את התוכניות מהאייקון</div>
@@ -312,7 +314,11 @@
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
 
   // כבר הותקן בדפדפן הזה: מעבירים ישר לתוכניות (אלא אם ביקשו להוסיף מחדש)
-  if (flagged() && !forceAdd) { location.replace(TARGET); return; }
+  if ((flagged() || isStandalone) && !forceAdd) {
+    $('sub').style.display = 'none'; $('alreadyBtn').style.display = 'none';
+    show('v-installed');
+    return;
+  }
 
   // כרום ואדג' יודעים לדווח שהאפליקציה כבר מותקנת
   if (navigator.getInstalledRelatedApps) {
