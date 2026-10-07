@@ -199,7 +199,8 @@
 
     <div id="success" class="success">✓ מעולה, קיצור הדרך נוסף. מעכשיו פותחים את התוכניות מהאייקון</div>
 
-    <a id="goLink" class="btn soft" href="https://www.talkwithkids.co.il/account/programs">כניסה לתוכניות שלי עכשיו</a>
+    <button id="closeBtn" class="btn soft" type="button">סגירה</button>
+    <div id="closedNote" class="ok" style="display:none">אפשר לסגור את הלשונית הזאת ולחזור לשיעור</div>
     <button id="alreadyBtn" class="tiny" type="button">כבר הוספתי קיצור, אל תציגי לי את זה שוב</button>
 
     <div class="footer-note">talkwithkids.co.il</div>
@@ -277,7 +278,17 @@
     setFlag(true); views.forEach(function (v) { $(v).className = 'view'; }); $('loading').style.display = 'none'; $('success').className = 'success show';
   });
 
-  $('alreadyBtn').addEventListener('click', function () { setFlag(true); location.replace(TARGET); });
+  // הלקוחות הגיעו מתוך התוכנית, לכן במקום "כניסה לתוכניות" יש סגירה של הלשונית
+  function closePage(rememberIt) {
+    if (rememberIt) setFlag(true);
+    try { window.close(); } catch (e) {}
+    setTimeout(function () {
+      if (history.length > 1 && document.referrer) { history.back(); return; }
+      $('closeBtn').style.display = 'none'; $('alreadyBtn').style.display = 'none'; $('closedNote').style.display = 'block';
+    }, 350);
+  }
+  $('closeBtn').addEventListener('click', function () { closePage(false); });
+  $('alreadyBtn').addEventListener('click', function () { closePage(true); });
   $('copyBtn').addEventListener('click', function () {
     var url = location.origin + location.pathname;
     var done = function () { $('copyBtn').textContent = 'הקישור הועתק, פתחי את הדפדפן והדביקי'; };
