@@ -9,8 +9,8 @@ await page.goto(pathToFileURL(path.join(DIR, 'icon-src.html')).href);
 await page.waitForTimeout(500);
 // [file, size, logo width as share of the square]
 for (const [file, size, share] of [
-  ['icon-512.png', 512, 80], ['icon-192.png', 192, 80],
-  ['icon-maskable-512.png', 512, 58], ['apple-touch-icon.png', 180, 80], ['favicon-32.png', 32, 92],
+  ['icon-512.png', 512, 94], ['icon-192.png', 192, 94],
+  ['icon-maskable-512.png', 512, 70], ['apple-touch-icon.png', 180, 94], ['favicon-32.png', 32, 100],
 ]) {
   await page.setViewportSize({ width: size, height: size });
   await page.evaluate(([s, sh]) => {

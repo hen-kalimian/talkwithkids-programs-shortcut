@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>התוכניות שלי - לדבר עם ילדים</title>
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="manifest.json?v=2">
 <meta name="theme-color" content="#f23e6d">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=2">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -22,8 +22,10 @@
     isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches ||
       window.matchMedia('(display-mode: minimal-ui)').matches || window.navigator.standalone === true || /[?&]source=pwa\b/.test(location.search);
   } catch (e) {}
-  if (isStandalone) {
-    try { localStorage.setItem(KEY, '1'); } catch (e) {}
+  var hasFlag = false, forceAddHead = /[?&](add=1|device=)/.test(location.search);
+  try { hasFlag = localStorage.getItem(KEY) === '1'; } catch (e) {}
+  if (isStandalone || (hasFlag && !forceAddHead)) {
+    if (isStandalone) { try { localStorage.setItem(KEY, '1'); } catch (e) {} }
     document.documentElement.className = 'go';
     location.replace(TARGET);
   }
@@ -50,7 +52,7 @@
     width:100%; max-width:440px; background:var(--panel); border-radius:24px; padding:28px 24px 24px;
     box-shadow:0 10px 34px rgba(242,62,109,0.10); border:1px solid var(--border); text-align:center;
   }
-  .logo{width:168px;max-width:60%;height:auto;display:block;margin:0 auto 10px;}
+  .logo{width:210px;max-width:70%;height:auto;display:block;margin:0 auto 10px;}
   h1{font-size:21px;margin:0 0 8px;color:var(--pink);}
   .sub{color:var(--muted);font-size:14px;line-height:1.6;margin-bottom:20px;}
   #loading{color:var(--muted);font-size:13px;margin-bottom:14px;}
@@ -118,7 +120,6 @@
 <body>
   <div class="card">
     <img class="logo" src="logo.png" alt="לדבר עם ילדים - חן קלימיאן, קלינאית תקשורת">
-    <h1>התוכניות שלי</h1>
     <div class="sub" id="sub">הוסיפי קיצור דרך למסך הבית, ומעכשיו הכניסה לתוכניות שלך לחיצה אחת</div>
 
     <div id="loading">בודקת את המכשיר שלך...</div>
@@ -200,7 +201,6 @@
 
     <a id="goLink" class="btn soft" href="https://www.talkwithkids.co.il/account/programs">כניסה לתוכניות שלי עכשיו</a>
     <button id="alreadyBtn" class="tiny" type="button">כבר הוספתי קיצור, אל תציגי לי את זה שוב</button>
-    <button id="resetBtn" class="tiny" type="button" style="display:none">הוספה מחדש של הקיצור</button>
 
     <div class="footer-note">talkwithkids.co.il</div>
   </div>
@@ -277,8 +277,7 @@
     setFlag(true); views.forEach(function (v) { $(v).className = 'view'; }); $('loading').style.display = 'none'; $('success').className = 'success show';
   });
 
-  $('alreadyBtn').addEventListener('click', function () { setFlag(true); location.href = TARGET; });
-  $('resetBtn').addEventListener('click', function () { setFlag(false); location.replace(location.pathname + '?add=1'); });
+  $('alreadyBtn').addEventListener('click', function () { setFlag(true); location.replace(TARGET); });
   $('copyBtn').addEventListener('click', function () {
     var url = location.origin + location.pathname;
     var done = function () { $('copyBtn').textContent = 'הקישור הועתק, פתחי את הדפדפן והדביקי'; };
@@ -302,12 +301,7 @@
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
 
   // כבר הותקן בדפדפן הזה: מעבירים ישר לתוכניות (אלא אם ביקשו להוסיף מחדש)
-  if (flagged() && !forceAdd) {
-    $('sub').style.display = 'none'; $('alreadyBtn').style.display = 'none'; $('resetBtn').style.display = 'inline-block';
-    show('v-installed');
-    setTimeout(function () { if (current === 'v-installed') location.href = TARGET; }, 1400);
-    return;
-  }
+  if (flagged() && !forceAdd) { location.replace(TARGET); return; }
 
   // כרום ואדג' יודעים לדווח שהאפליקציה כבר מותקנת
   if (navigator.getInstalledRelatedApps) {

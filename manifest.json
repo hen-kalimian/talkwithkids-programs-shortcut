@@ -11,11 +11,11 @@
   "dir": "rtl",
   "lang": "he",
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    { "src": "icon-192.png?v=2", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png?v=2", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png?v=2", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
-  "related_applications": [
+  "prefer_related_applications": false, "related_applications": [
     { "platform": "webapp", "url": "https://hen-kalimian.github.io/talkwithkids-programs-shortcut/manifest.json" }
   ]
 }
