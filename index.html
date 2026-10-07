@@ -209,6 +209,10 @@
 (function () {
   var $ = function (id) { return document.getElementById(id); };
   var ua = navigator.userAgent || '';
+  // תצוגה מקדימה למכשיר אחר, לבדיקה במחשב: ?device=ios או ?device=android
+  var dev = (location.search.match(/[?&]device=(ios|android)/) || [])[1];
+  if (dev === 'ios') ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Mobile/15E148 Safari/604.1';
+  if (dev === 'android') ua = 'Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Firefox/125.0 Mobile Safari/537.36';
   var isIOS = /iPad|iPhone|iPod/.test(ua) || (ua.indexOf('Macintosh') > -1 && navigator.maxTouchPoints > 1);
   var isAndroid = /Android/i.test(ua);
   var isInApp = /FBAN|FBAV|FB_IAB|Instagram|WhatsApp|Line\/|Snapchat|TikTok|Messenger|MicroMessenger/i.test(ua) || (isAndroid && /; wv\)/.test(ua));
@@ -222,7 +226,7 @@
 
   function flagged() { try { return localStorage.getItem(KEY) === '1'; } catch (e) { return false; } }
   function setFlag(v) { try { if (v) localStorage.setItem(KEY, '1'); else localStorage.removeItem(KEY); } catch (e) {} }
-  var forceAdd = /[?&]add=1\b/.test(location.search);
+  var forceAdd = /[?&](add=1|device=)/.test(location.search);
 
   var deferred = null, decided = false, current = null;
   var views = ['v-install', 'v-ios', 'v-android', 'v-desktop', 'v-inapp', 'v-installed'];
@@ -234,7 +238,7 @@
 
   function decide() {
     if (decided && current === 'v-install') return;
-    if (deferred) { decided = true; return show('v-install'); }
+    if (deferred && !dev) { decided = true; return show('v-install'); }
     decided = true;
     if (isInApp) {
       if (isIOS) $('inappNote').textContent = 'הדף נפתח בתוך אפליקציה, ושם אי אפשר להוסיף קיצור דרך. לחצי על שלוש הנקודות (או על סמל המצפן) ובחרי "פתיחה בספארי".';
