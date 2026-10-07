@@ -76,6 +76,42 @@
   .success{display:none;color:var(--mint-dark);font-weight:700;font-size:15px;margin:6px 0 12px;}
   .success.show{display:block;}
   .tiny{display:inline-block;margin-top:8px;background:none;border:none;color:var(--muted);font-size:12.5px;text-decoration:underline;cursor:pointer;font-family:inherit;padding:4px;}
+  /* מדריך מונפש לאייפון */
+  .guide{margin:0 0 16px;}
+  .phone{position:relative;width:200px;height:330px;margin:0 auto 10px;border:6px solid #2c3a42;border-radius:30px;background:#fff;overflow:hidden;box-shadow:0 8px 22px rgba(30,42,49,.18);}
+  .scene{position:absolute;inset:0;opacity:0;transition:opacity .45s;}
+  .scene.on{opacity:1;}
+  .mockpage{padding:26px 16px 0;text-align:center;}
+  .mockpage img{width:70px;display:block;margin:0 auto 14px;}
+  .mockpage i{display:block;height:9px;border-radius:5px;background:#eceff1;margin:0 0 9px;}
+  .mockpage i.short{width:60%;margin-right:auto;margin-left:auto;}
+  .mockpage.dim{opacity:.45;}
+  .safbar{position:absolute;left:0;right:0;bottom:0;height:46px;background:#f4f5f7;border-top:1px solid #dfe3e6;display:flex;justify-content:space-around;align-items:center;}
+  .bi{position:relative;width:26px;height:26px;border-radius:7px;background:#e3e7ea;display:flex;align-items:center;justify-content:center;}
+  .bi svg{width:18px;height:18px;fill:none;stroke:#386380;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .bi.share{background:var(--pink-tint);}
+  .ring{position:absolute;inset:-6px;border:3px solid var(--pink);border-radius:12px;animation:pulse 1s ease-in-out infinite;pointer-events:none;}
+  .row .ring,.addb .ring{inset:-3px;border-radius:10px;}
+  @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.12);opacity:.45}}
+  .sheet{position:absolute;left:0;right:0;bottom:0;background:#f2f3f5;border-radius:16px 16px 0 0;padding:14px 12px 12px;animation:up .5s both;}
+  @keyframes up{from{transform:translateY(40px)}to{transform:none}}
+  .row{position:relative;background:#fff;border-radius:10px;padding:10px 12px;margin-bottom:6px;font-size:12.5px;text-align:right;color:#26333a;}
+  .row.hot{background:var(--pink-tint);font-weight:700;color:var(--pink-dark);}
+  .dlg{position:absolute;inset:0;background:#f2f3f5;}
+  .dlgtop{display:flex;justify-content:space-between;align-items:center;padding:16px 12px 10px;background:#fff;border-bottom:1px solid #e3e7ea;font-size:11.5px;}
+  .dlgt{font-weight:700;} .cn{color:#2f7bd4;}
+  .addb{position:relative;color:#2f7bd4;font-weight:700;padding:3px 8px;}
+  .dlgbody{background:#fff;margin:14px 12px;border-radius:12px;padding:16px;display:flex;align-items:center;gap:12px;font-size:13px;}
+  .dlgbody img{width:48px;height:48px;border-radius:11px;border:1px solid #e3e7ea;}
+  .home{position:absolute;inset:0;background:linear-gradient(160deg,#fbd3de,#cfeadf);display:grid;grid-template-columns:repeat(4,1fr);gap:16px 6px;padding:34px 12px;align-content:start;}
+  .home u{display:block;width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,.55);margin:0 auto;}
+  .newapp{position:absolute;right:50%;bottom:78px;transform:translateX(50%);text-align:center;font-size:10px;color:#26333a;animation:pop .7s both;}
+  .newapp img{width:52px;height:52px;border-radius:12px;display:block;margin:0 auto 3px;box-shadow:0 4px 10px rgba(0,0,0,.25);}
+  @keyframes pop{0%{transform:translateX(50%) scale(.2);opacity:0}70%{transform:translateX(50%) scale(1.15)}100%{transform:translateX(50%) scale(1);opacity:1}}
+  .cap{font-family:'Rubik',sans-serif;font-weight:700;font-size:15px;color:var(--pink-dark);min-height:24px;}
+  .dots{display:flex;gap:6px;justify-content:center;margin-top:6px;}
+  .dots i{width:8px;height:8px;border-radius:50%;background:#e6dfe3;}
+  .dots i.on{background:var(--pink);}
   .footer-note{margin-top:16px;font-size:11.5px;color:var(--muted);}
 </style>
 </head>
@@ -94,6 +130,36 @@
 
     <!-- אייפון / אייפד -->
     <div id="v-ios" class="view">
+      <div class="guide" id="guide" aria-hidden="true">
+        <div class="phone">
+          <div class="scene s1 on">
+            <div class="mockpage"><img src="logo.png" alt=""><i></i><i class="short"></i><i></i></div>
+            <div class="safbar"><span class="bi"></span><span class="bi"></span>
+              <span class="bi share"><svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><rect x="5" y="12" width="14" height="8" rx="2"/></svg><b class="ring"></b></span>
+              <span class="bi"></span><span class="bi"></span></div>
+          </div>
+          <div class="scene s2">
+            <div class="mockpage dim"><img src="logo.png" alt=""><i></i><i class="short"></i></div>
+            <div class="sheet">
+              <div class="row">העתק</div><div class="row">הוסף לסימניות</div>
+              <div class="row hot">הוסף למסך הבית<b class="ring"></b></div>
+              <div class="row">הדפס</div>
+            </div>
+          </div>
+          <div class="scene s3">
+            <div class="dlg">
+              <div class="dlgtop"><span class="addb">הוסף<b class="ring"></b></span><span class="dlgt">הוסף למסך הבית</span><span class="cn">ביטול</span></div>
+              <div class="dlgbody"><img src="apple-touch-icon.png" alt=""><span>התוכניות שלי</span></div>
+            </div>
+          </div>
+          <div class="scene s4">
+            <div class="home"><u></u><u></u><u></u><u></u><u></u><u></u><u></u><u></u>
+              <div class="newapp"><img src="apple-touch-icon.png" alt=""><span>התוכניות שלי</span></div></div>
+          </div>
+        </div>
+        <div class="cap" id="cap">1. לחצי על כפתור השיתוף</div>
+        <div class="dots"><i class="on"></i><i></i><i></i><i></i></div>
+      </div>
       <ol class="steps">
         <li class="step"><span class="num">1</span><span class="txt" id="iosShare">לחצי על כפתור השיתוף <span class="ico"><svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><rect x="5" y="12" width="14" height="8" rx="2"/></svg></span> בתחתית המסך</span></li>
         <li class="step"><span class="num">2</span><span class="txt">גללי מטה ובחרי "הוסף למסך הבית"</span></li>
@@ -214,6 +280,20 @@
     var done = function () { $('copyBtn').textContent = 'הקישור הועתק, פתחי את הדפדפן והדביקי'; };
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, done); else done();
   });
+
+  // מדריך מונפש לאייפון: ארבעה שלבים שחוזרים
+  var scenes = document.querySelectorAll('#guide .scene'), dots = document.querySelectorAll('#guide .dots i');
+  var caps = ['1. לחצי על כפתור השיתוף', '2. בחרי "הוסף למסך הבית"', '3. לחצי "הוסף"', '4. זהו! האייקון במסך הבית'];
+  var gi = 0;
+  function showScene(n) {
+    gi = n;
+    for (var k = 0; k < scenes.length; k++) { scenes[k].className = 'scene s' + (k + 1) + (k === n ? ' on' : ''); dots[k].className = k === n ? 'on' : ''; }
+    $('cap').textContent = caps[n];
+    // מפעילים מחדש את האנימציות של השלב
+    var s = scenes[n]; s.style.display = 'none'; void s.offsetHeight; s.style.display = '';
+  }
+  window.__showScene = showScene;
+  setInterval(function () { if (current === 'v-ios') showScene((gi + 1) % 4); }, 2600);
 
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
 
