@@ -25,7 +25,9 @@
   var forceAddHead = /[?&](add=1|device=)/.test(location.search);
   // אייקון במסך הבית: נפתח בלי דף מפנה (referrer) או עם source=pwa. לחיצה על הלחצן בתוך שיעור מגיעה עם דף מפנה, ואז לא מעבירים לשום מקום.
   var fromIcon = /[?&]source=pwa(&|$)/.test(location.search) || (isStandalone && !document.referrer);
-  if (fromIcon && !forceAddHead) {
+  var isEmbed = /[?&]embed=1(&|$)/.test(location.search);
+  if (isEmbed) document.documentElement.className += ' embed';
+  if (fromIcon && !forceAddHead && !isEmbed) {
     try { localStorage.setItem(KEY, '1'); } catch (e) {}
     document.documentElement.className = 'go';
     location.replace(TARGET);
@@ -115,12 +117,20 @@
   .dots{display:flex;gap:6px;justify-content:center;margin-top:6px;}
   .dots i{width:8px;height:8px;border-radius:50%;background:#e6dfe3;}
   .dots i.on{background:var(--pink);}
+  .embed body{background:#fff;padding:0;display:block;min-height:0;}
+  .embed .card{box-shadow:none;border:none;max-width:560px;margin:0 auto;padding:6px 8px;}
+  .embed-title{display:none;}
+  .embed .embed-title{display:block;text-align:center;font-family:'Rubik',sans-serif;font-weight:700;font-size:18px;color:var(--pink-dark);margin:2px 0 10px;}
+  .embed .logo,.embed .sub,.embed .footer-note,.embed #alreadyBtn,.embed #closeBtn,.embed #closedNote,.embed #loading,.embed #success{display:none !important;}
+  .embed #v-ios .steps{display:none;}
+  .embed .phone{width:180px;height:290px;margin-bottom:8px;}
   .footer-note{margin-top:16px;font-size:11.5px;color:var(--muted);}
 </style>
 </head>
 <body>
   <div class="card">
     <img class="logo" src="logo.png" alt="לדבר עם ילדים - חן קלימיאן, קלינאית תקשורת">
+    <div class="embed-title" id="embedTitle">להוספת קיצור דרך למסך הבית</div>
     <div class="sub" id="sub">לכניסה לתוכנית בלחיצה הוסיפי קיצור דרך למסך הבית</div>
 
     <div id="loading">בודקת את המכשיר שלך...</div>
@@ -240,6 +250,7 @@
   }
 
   function decide() {
+    if (isEmbed) return;
     if (decided && current === 'v-install') return;
     if (deferred && !dev) { decided = true; return show('v-install'); }
     decided = true;
@@ -314,6 +325,19 @@
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
 
   // כבר הותקן בדפדפן הזה: מעבירים ישר לתוכניות (אלא אם ביקשו להוסיף מחדש)
+  if (isEmbed) {
+    // בתוך הדף של האתר: מראים רק הדרכה לפי המכשיר, בלי הפניות ובלי כפתור התקנה (ההוספה נעשית על הדף של האתר עצמו)
+    if (isIOS) { show('v-ios'); }
+    else if (isAndroid) { $('andPick').textContent = 'בחרי "הוספה למסך הבית" או "התקנת אפליקציה"'; show('v-android'); }
+    else {
+      if (isSafariDesktop) { $('deskMenu').textContent = 'בשורת התפריטים העליונה של ספארי לחצי על "קובץ"'; $('deskPick').textContent = 'בחרי "הוספה ל-Dock"'; }
+      else if (isFirefox) { $('deskMenu').textContent = 'לחצי Ctrl ו-D יחד'; $('deskPick').textContent = 'אשרי, והדף יישמר בסימניות'; }
+      else if (isEdge) { $('deskMenu').textContent = 'פתחי את תפריט הדפדפן (שלוש הנקודות למעלה)'; $('deskPick').textContent = 'בחרי "אפליקציות" ואז "התקנת אתר זה כאפליקציה"'; }
+      else { $('deskMenu').textContent = 'פתחי את תפריט הדפדפן (שלוש הנקודות למעלה) ובחרי "כלים נוספים"'; $('deskPick').textContent = 'בחרי "יצירת קיצור דרך" ואשרי'; }
+      show('v-desktop');
+    }
+    return;
+  }
   if ((flagged() || isStandalone) && !forceAdd) {
     $('sub').style.display = 'none'; $('alreadyBtn').style.display = 'none';
     show('v-installed');
