@@ -40,6 +40,9 @@
     var ok = document.createElement('button');
     ok.type = 'button'; ok.textContent = 'סגירה';
     ok.style.cssText = 'display:block;margin:6px auto 0;border:none;border-radius:99px;background:#f23e6d;color:#fff;font-weight:700;font-size:17px;padding:12px 44px;cursor:pointer;font-family:inherit;';
+    window.addEventListener('message', function (ev) {
+      try { if (ev.data && ev.data.twkShortcutH && ev.source === fr.contentWindow) fr.style.height = Math.min(Math.max(ev.data.twkShortcutH, 120), 560) + 'px'; } catch (e) {}
+    });
     function close() { if (wrap.parentNode) wrap.parentNode.removeChild(wrap); }
     x.onclick = close; ok.onclick = close;
     wrap.onclick = function (e) { if (e.target === wrap) close(); };

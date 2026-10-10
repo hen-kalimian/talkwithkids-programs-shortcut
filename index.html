@@ -336,6 +336,9 @@
       else { $('deskMenu').textContent = 'פתחי את תפריט הדפדפן (שלוש הנקודות למעלה) ובחרי "כלים נוספים"'; $('deskPick').textContent = 'בחרי "יצירת קיצור דרך" ואשרי'; }
       show('v-desktop');
     }
+    // מדווחים לדף האתר מה גובה התוכן, כדי שהחלונית תתאים את עצמה
+    var reportH = function () { try { var c = document.querySelector('.card'); parent.postMessage({ twkShortcutH: Math.ceil(c.getBoundingClientRect().height) + 16 }, '*'); } catch (e) {} };
+    reportH(); setTimeout(reportH, 300); setTimeout(reportH, 1000); window.addEventListener('load', reportH); window.addEventListener('resize', reportH);
     return;
   }
   if ((flagged() || isStandalone) && !forceAdd) {
